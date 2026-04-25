@@ -144,12 +144,12 @@
   .timeline-carousel-nav {
     padding: 18px 60px 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     gap: 16px;
   }
 
-  .timeline-nav-btn {
+  .timeline-nav-btn { display: none !important; 
     border: 1px solid var(--light-gray);
     background: transparent;
     color: var(--black);
@@ -168,7 +168,7 @@
     border-color: var(--black);
   }
 
-  .timeline-current-year {
+  .timeline-current-year { display: none; 
     font-family: var(--narrow);
     font-size: 12px;
     letter-spacing: 0.25em;
@@ -201,6 +201,27 @@
     position: relative;
   }
 
+  .timeline-track::before,
+  .timeline-track::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 72px;
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .timeline-track::before {
+    left: 0;
+    background: linear-gradient(to right, var(--white), rgba(247, 244, 238, 0));
+  }
+
+  .timeline-track::after {
+    right: 0;
+    background: linear-gradient(to left, var(--white), rgba(247, 244, 238, 0));
+  }
+
   .timeline-line {
     display: none;
   }
@@ -208,34 +229,54 @@
   .timeline-years {
     position: relative;
     min-height: 470px;
+    overflow: visible;
   }
 
   .year-col {
     position: absolute;
-    inset: 0;
+    top: 0;
+    width: min(65%, 780px);
     opacity: 0;
-    transform: translateX(64px);
     pointer-events: none;
     transition: opacity 320ms ease, transform 420ms ease;
     display: grid;
-    grid-template-columns: minmax(120px, 180px) 1fr;
-    gap: 48px;
+    grid-template-columns: 1fr;
+    gap: 24px;
     align-items: start;
-    padding: 56px 0 0;
+    padding: 40px 24px 0;
+    left: 50%;
+    transform: translateX(-50%) scale(0.96);
   }
 
   .year-col.active {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateX(-50%) scale(1);
     pointer-events: auto;
+    z-index: 3;
+  }
+
+  .year-col.peek-prev,
+  .year-col.peek-next {
+    opacity: 0.28;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .year-col.peek-prev {
+    transform: translateX(calc(-50% - 44%)) scale(0.9);
+  }
+
+  .year-col.peek-next {
+    transform: translateX(calc(-50% + 44%)) scale(0.9);
   }
 
   .year-col.is-exit-left {
-    transform: translateX(-64px);
+    transform: translateX(calc(-50% - 18%)) scale(0.96);
   }
 
   .year-col.is-exit-right {
-    transform: translateX(64px);
+    transform: translateX(calc(-50% + 18%)) scale(0.96);
   }
 
   .year-marker {
@@ -243,7 +284,10 @@
     padding-top: 12px;
   }
 
-  .year-marker::before {
+  .year-marker::before { display: none; /* hidden - year shown prominently */ 
+  }
+  .year-dot { display: none; }
+  .UNUSED {
     content: '';
     position: absolute;
     top: 0;
@@ -266,9 +310,9 @@
 
   .year-num {
     font-family: var(--serif);
-    font-size: 72px;
+    font-size: clamp(80px, 10vw, 140px);
     font-weight: 900;
-    line-height: 0.95;
+    line-height: 0.9;
     margin-bottom: 0;
     letter-spacing: -0.04em;
   }
@@ -276,6 +320,7 @@
   .year-articles {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
     padding-top: 6px;
     max-width: 760px;
@@ -292,8 +337,8 @@
     border: none;
     background: none;
     text-align: left;
-    padding: 0 0 6px 0;
-    display: block;
+    padding: 2px 8px 6px 8px;
+    display: inline-block;
   }
   .article-link .link-author {
     font-weight: 700;
@@ -304,7 +349,7 @@
     font-weight: 400;
   }
   .article-link .link-title {
-    color: var(--gray);
+    color: #666460;
     font-size: 12px;
     font-style: italic;
     font-family: var(--body-serif);
@@ -538,7 +583,9 @@
     .timeline-carousel-nav, .timeline-header, .timeline-track { padding-left: 32px; padding-right: 32px; }
     .timeline-carousel-nav { padding-top: 16px; }
     .timeline-years { min-height: 560px; }
-    .year-col { grid-template-columns: 1fr; gap: 22px; padding-top: 40px; }
+    .year-col { grid-template-columns: 1fr; gap: 16px; padding-top: 32px; width: 88%; left: 50%; padding-left: 16px; padding-right: 16px; }
+    .year-col.peek-prev { transform: translateX(calc(-50% - 38%)) scale(0.92); }
+    .year-col.peek-next { transform: translateX(calc(-50% + 38%)) scale(0.92); }
     .year-marker { max-width: 180px; }
     .author-section { grid-template-columns: 1fr; gap: 28px; padding: 56px 32px 72px; }
     .author-photo { max-width: 320px; }
@@ -546,7 +593,13 @@
     .article-nav { padding: 16px 32px; }
     .article-year-big { font-size: 100px; margin-bottom: -30px; }
   }
-</style>
+
+  .year-col.peek-prev .article-link,
+  .year-col.peek-next .article-link {
+    pointer-events: none;
+  }
+
+  </style>
 </head>
 <body>
 
@@ -1087,34 +1140,31 @@ function initTimelineCarousel() {
   let index = years.findIndex(el => el.classList.contains('active'));
   if (index < 0) index = 0;
 
+  function syncStates() {
+    years.forEach((el, i) => {
+      el.classList.remove('active', 'peek-prev', 'peek-next', 'is-exit-left', 'is-exit-right');
+      el.onclick = null;
+      if (i === index) el.classList.add('active');
+      if (i === (index - 1 + years.length) % years.length) {
+        el.classList.add('peek-prev');
+        el.onclick = () => render(index - 1, -1);
+      }
+      if (i === (index + 1) % years.length) {
+        el.classList.add('peek-next');
+        el.onclick = () => render(index + 1, 1);
+      }
+    });
+    currentYear.textContent = years[index].dataset.year;
+  }
+
   function render(nextIndex, direction = 1) {
     if (nextIndex < 0) nextIndex = years.length - 1;
     if (nextIndex >= years.length) nextIndex = 0;
-    const current = years[index];
-    const next = years[nextIndex];
-    if (current === next) return;
+    if (nextIndex === index) return;
 
-    current.classList.remove('active', 'is-exit-left', 'is-exit-right');
-    next.classList.remove('is-exit-left', 'is-exit-right');
-
-    current.classList.add(direction > 0 ? 'is-exit-left' : 'is-exit-right');
-    next.classList.add('active');
-    next.style.transform = direction > 0 ? 'translateX(64px)' : 'translateX(-64px)';
-    next.style.opacity = '0';
-
-    requestAnimationFrame(() => {
-      next.style.transform = 'translateX(0)';
-      next.style.opacity = '1';
-    });
-
-    setTimeout(() => {
-      current.classList.remove('is-exit-left', 'is-exit-right');
-      next.style.transform = '';
-      next.style.opacity = '';
-    }, 420);
-
+    years[index].classList.add(direction > 0 ? 'is-exit-left' : 'is-exit-right');
     index = nextIndex;
-    currentYear.textContent = years[index].dataset.year;
+    syncStates();
   }
 
   prevBtn.addEventListener('click', () => render(index - 1, -1));
@@ -1125,6 +1175,8 @@ function initTimelineCarousel() {
     if (e.key === 'ArrowLeft') render(index - 1, -1);
     if (e.key === 'ArrowRight') render(index + 1, 1);
   });
+
+  syncStates();
 }
 
 window.addEventListener('load', initTimelineCarousel);
