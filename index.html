@@ -149,7 +149,7 @@
     gap: 16px;
   }
 
-  .timeline-nav-btn { display: none !important; 
+  .timeline-nav-btn { 
     border: 1px solid var(--light-gray);
     background: transparent;
     color: var(--black);
@@ -168,7 +168,7 @@
     border-color: var(--black);
   }
 
-  .timeline-current-year { display: none; 
+  .timeline-current-year { 
     font-family: var(--narrow);
     font-size: 12px;
     letter-spacing: 0.25em;
@@ -281,7 +281,29 @@
 
   .year-marker {
     position: relative;
-    padding-top: 12px;
+    padding-top: 0;
+    text-align: center;
+    width: 100%;
+  }
+  .year-marker-line {
+    width: 100%;
+    height: 1px;
+    background: var(--black);
+    position: relative;
+    margin-bottom: 28px;
+    margin-top: 20px;
+  }
+  .year-marker-line::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: var(--black);
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    bottom: -4px;
+    transform: translateX(-50%);
   }
 
   .year-marker::before { display: none; /* hidden - year shown prominently */ 
@@ -315,15 +337,17 @@
     line-height: 0.9;
     margin-bottom: 0;
     letter-spacing: -0.04em;
+    text-align: center;
   }
 
   .year-articles {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
     padding-top: 6px;
     max-width: 760px;
+    width: 100%;
   }
 
   .article-link {
@@ -482,24 +506,24 @@
 
   .article-body p.drop-cap::first-letter {
     font-family: var(--serif);
-    font-size: 5.5em;
-    font-weight: 900;
+    font-size: 2.2em;
+    font-weight: 700;
     float: left;
-    line-height: 0.75;
-    margin-right: 8px;
-    margin-top: 8px;
+    line-height: 1.1;
+    margin-right: 6px;
+    margin-top: 2px;
     color: var(--black);
   }
 
   .article-pullquote {
-    font-family: var(--serif);
+    font-family: var(--body-serif);
     font-size: 24px;
-    font-weight: 400;
-    font-style: italic;
+    font-weight: 700;
+    font-style: normal;
     line-height: 1.45;
     color: var(--black);
-    border-top: 2px solid var(--black);
-    border-bottom: 2px solid var(--black);
+    border-top: 1px solid var(--black);
+    border-bottom: 1px solid var(--black);
     padding: 28px 0;
     margin: 56px 0;
   }
@@ -574,6 +598,26 @@
     max-width: 65ch;
   }
 
+
+  .next-article-btn {
+    margin-left: auto;
+    font-family: var(--narrow);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: none;
+    border: 1px solid var(--light-gray);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .next-article-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .next-article-btn::after { content: '→'; font-size: 15px; }
+
   /* ---- RESPONSIVE ---- */
   @media (max-width: 900px) {
     .home-hero { grid-template-columns: 1fr; }
@@ -607,11 +651,11 @@
 <div id="home" class="page active">
   <section class="home-hero">
     <div class="year-bar">
-      <span>Хрестоматия · 1941–1945</span>
+      <span>Военная публицистика</span>
+      <span>1901–1945</span>
     </div>
 
     <div class="hero-left">
-      <p class="project-label">Альманах о годах войны</p>
       <h1 class="main-title">Великие<br>годы<br>русской<br>литера-<br>туры</h1>
       <p class="subtitle-spaced">( а л ь м а н а х &nbsp; о &nbsp; г о д а х &nbsp; в о й н ы )</p>
       <p class="hero-desc">Советская военная публицистика стала мощным инструментом мобилизации и объединения общества. Ведущие авторы — И.Г. Эренбург, А.Н. Толстой, Л.М. Леонов — с первых дней войны сотрудничали с главными газетами СССР.</p>
@@ -627,9 +671,9 @@
   <!-- TIMELINE -->
   <section class="timeline-section">
     <div class="timeline-header">
-      <span>Хронология публикаций</span>
+      <span style="font-size:11px;letter-spacing:0.22em;text-transform:uppercase;font-family:var(--narrow);color:var(--gray);">Оглавление</span>
       <div class="line"></div>
-      <span>Листайте по годам</span>
+      <span style="font-family:var(--narrow);font-size:11px;letter-spacing:0.38em;text-transform:uppercase;color:var(--gray);">А&nbsp;л&nbsp;ь&nbsp;м&nbsp;а&nbsp;н&nbsp;а&nbsp;х &nbsp; г&nbsp;о&nbsp;д&nbsp;о&nbsp;в &nbsp; в&nbsp;о&nbsp;й&nbsp;н&nbsp;ы</span>
     </div>
     <div class="timeline-carousel-nav">
       <button class="timeline-nav-btn" id="timeline-prev" aria-label="Предыдущий год">←</button>
@@ -642,7 +686,7 @@
         <!-- 1941 -->
         <div class="year-col active" data-year="1941">
           <div class="year-marker">
-            <div class="year-dot"></div>
+            <div class="year-marker-line"></div>
             <div class="year-num">1941</div>
           </div>
           <div class="year-articles">
@@ -658,7 +702,7 @@
         <!-- 1942 -->
         <div class="year-col" data-year="1942">
           <div class="year-marker">
-            <div class="year-dot"></div>
+            <div class="year-marker-line"></div>
             <div class="year-num">1942</div>
           </div>
           <div class="year-articles">
@@ -675,7 +719,7 @@
         <!-- 1943 -->
         <div class="year-col" data-year="1943">
           <div class="year-marker">
-            <div class="year-dot"></div>
+            <div class="year-marker-line"></div>
             <div class="year-num">1943</div>
           </div>
           <div class="year-articles">
@@ -690,7 +734,7 @@
         <!-- 1944 -->
         <div class="year-col" data-year="1944">
           <div class="year-marker">
-            <div class="year-dot"></div>
+            <div class="year-marker-line"></div>
             <div class="year-num">1944</div>
           </div>
           <div class="year-articles">
@@ -706,7 +750,7 @@
         <!-- 1945 -->
         <div class="year-col" data-year="1945">
           <div class="year-marker">
-            <div class="year-dot"></div>
+            <div class="year-marker-line"></div>
             <div class="year-num">1945</div>
           </div>
           <div class="year-articles">
@@ -722,18 +766,6 @@
       </div>
     </div>
   </section>
-  <section class="author-section">
-    <div class="author-photo">
-      <img src="author.jpg" alt="Фотография автора" onerror="this.style.display='none'; this.parentElement.textContent='author.jpg';">
-    </div>
-    <div class="author-copy">
-      <p class="author-kicker">Об авторе</p>
-      <h2 class="author-title">Имя автора или составителя</h2>
-      <p class="author-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere, ipsum at porttitor posuere, neque mi feugiat est, sed hendrerit mi nibh et lorem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
-      <p class="author-text">Suspendisse potenti. Vivamus dapibus, eros eu auctor convallis, tortor lacus suscipit arcu, vitae tristique risus sem nec odio. Donec ac sem non lorem pretium posuere. Curabitur non nibh quis justo tempor tincidunt.</p>
-      <p class="author-text">Praesent commodo, velit sit amet fermentum tincidunt, arcu lectus consequat urna, at hendrerit lectus augue sed justo. Nulla facilisi. Duis non nisl a nibh vulputate aliquet vitae ac nibh.</p>
-    </div>
-  </section>
 </div>
 
 <!-- ARTICLE PAGE -->
@@ -741,6 +773,7 @@
   <nav class="article-nav">
     <button class="back-btn" onclick="goHome()">На главную</button>
     <span class="article-nav-year" id="nav-year"></span>
+    <button class="next-article-btn" id="next-article-btn" onclick="goNextArticle()">Следующий материал</button>
   </nav>
   <div class="article-content" id="article-body">
   </div>
@@ -1088,7 +1121,18 @@ const articles = {
   }
 };
 
+const articleOrder = ['lavrenev','ehrenburg_degaulle','tolstoy_krov','tolstoy_rodina','tolstoy_nas1','gorbatov_zhizn','leonov_letter1','leonov_letter2','ehrenburg_newyear','ehrenburg_saints','ehrenburg_threat','tolstoy_kill','tolstoy_self','kriger','vishnevsky','ehrenburg_weighed','tolstoy_nas2','simonov','gorbatov_majdanek'];
+let _currentId = null;
+
+function goNextArticle() {
+  const idx = articleOrder.indexOf(_currentId);
+  if (idx >= 0 && idx < articleOrder.length - 1) openArticle(articleOrder[idx + 1]);
+}
+
 function openArticle(id) {
+  _currentId = id;
+  const nb = document.getElementById('next-article-btn');
+  if (nb) nb.style.display = (articleOrder.indexOf(id) >= articleOrder.length - 1) ? 'none' : 'flex';
   const a = articles[id];
   if (!a) return;
 
@@ -1096,7 +1140,7 @@ function openArticle(id) {
 
   let html = `
     <div class="article-header">
-      <div class="article-year-big">${a.year}</div>
+      <p style="font-family:var(--narrow);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gray);margin-bottom:14px;">${a.year}</p>
       <p class="article-author">${a.author}</p>
       <h2 class="article-title">${a.title}</h2>
       ${a.note ? `<p class="article-note">${a.note}</p>` : ''}
